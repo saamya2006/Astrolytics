@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Mission | Team Astrolytics</title> 
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* --- Page Reset --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Exo 2', sans-serif; /* Set a consistent font */
+        }
+
+        /* --- Full Page Background & Effects --- */
+        .mission-background-container {
+            position: fixed; /* Locks to the viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('mission.png') no-repeat center center/cover; 
+            
+            /* --- THE EFFECTS --- */
+            filter: brightness(0.7) contrast(1.1);
+            transform: scale(1.1); /* Start slightly zoomed in */
+            transition: transform 6s ease-out, filter 0.5s ease;
+            
+            z-index: -2; /* Puts it behind ALL content */
+        }
+
+        /* Hover effect is now on the body */
+        body:hover .mission-background-container {
+            transform: scale(1); /* Zoom back out to normal size */
+            filter: brightness(1.2);
+        }
+
+        .mission-overlay {
+            position: fixed; /* Locks to the viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Dark layer */
+            z-index: -1; /* Sits between background and content */
+        }
+
+
+        /* --- Content Styling --- */
+        
+        /* Ensure header, main, and footer appear ON TOP */
+        .main-header, main, .main-footer {
+            position: relative; /* Must be relative to respect z-index */
+            z-index: 2;
+            color: #fff; /* Make all text white by default */
+            
+            /* Remove any default browser margins */
+            margin: 0;
+        }
+
+        /* Give header/footer a semi-transparent background for clarity */
+        .main-header, .main-footer {
+             /* Assuming these are defined in style.css, but adding clarity */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px; /* Add padding */
+            background-color: rgba(0, 0, 0, 0.2); /* Optional: slight background */
+        }
+
+        .logo-image {
+            height: 100px; 
+            width: auto;
+            vertical-align: middle;
+        }
+
+        /* Styles for Nav (assuming from style.css) */
+        .main-nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1.1rem;
+        }
+
+        .main-nav a.active {
+            color: #91e9f5; 
+            font-weight: bold;
+        }
+
+        /* This section now just centers the text */
+        .mission-hero {
+            /* Fill the viewport height MINUS the header/footer */
+            min-height: calc(100vh - 200px); /* Adjust 200px as needed */
+            
+            /* Flexbox to center content */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .mission-hero h2 {
+            font-size: 3rem; 
+            margin-bottom: 20px;
+        }
+        
+        .mission-hero .highlight {
+             color: #00bcd4;
+        }
+
+        .mission-hero p {
+            font-size: 1.2rem;
+            max-width: 1000px; 
+            line-height: 1.6;
+        }
+
+        /* Footer styling */
+        .main-footer {
+            display: block; /* Override flex for centering text */
+            text-align: center;
+            padding: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="mission-background-container"></div>
+    <div class="mission-overlay"></div>
+
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html">
+                <img src="logo.png" alt="Team Astrolytics Logo" class="logo-image">
+            </a>
+        </div>
+        <nav class="main-nav">
+            <a href="mission.html" class="active">Mission</a> 
+            <a href="design.html">Design</a>
+            <a href="data.html">Launch Data</a>
+            <a href="team.html">The Team</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="mission-hero">
+            <div class="mission-content-wrapper">
+                <h2><span class="highlight">01</span>OUR MISSION</h2>
+                <p>To design, build, and launch a can-sized satellite to collect critical atmospheric data, testing the limits of compact aerodynamic design and low-cost payload delivery.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Team Astrolytics | Mission Control</p>
+    </footer>
+
+</body>
+</html>

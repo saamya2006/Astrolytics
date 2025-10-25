@@ -1,28 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" type="image/x-icon" href="https://cdn.autodesk.io/favicon.ico">
-    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.css">
-    <link rel="stylesheet" href="/main.css">
-    <title>Autodesk Platform Services: Simple Viewer</title>
+    <title>Team Astrolytics | Mission Control</title> 
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
+
+    <style>
+        .logo-image {
+            height: 60px; 
+            width: auto;
+            vertical-align: middle;
+        } 
+    </style>
 </head>
-
 <body>
-    <div id="header">
-        <img class="logo" src="https://cdn.autodesk.io/logo/black/stacked.png" alt="Autodesk Platform Services">
-        <span class="title">Simple Viewer</span>
-        <select name="models" id="models"></select>
-        <button id="upload" title="Upload New Model">Upload</button>
-        <input style="display: none" type="file" id="input">
-    </div>
-    <div id="preview"></div>
-    <div id="overlay"></div>
-    <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.js"></script>
-    <script src="/main.js" type="module"></script>
-</body>
+    <section>
+        <div id="my-cansat-viewer"></div>
+    </section>
 
+    <header class="main-header">
+        <div class="logo">
+            <img src="logo.png" alt="Team Astrolytics Logo" class="logo-image">
+        </div>
+        <nav class="main-nav">
+            <a href="mission.html">Mission</a> 
+            <a href="design.html">Design</a>
+            <a href="data.html">Launch Data</a>
+            <a href="team.html">The Team</a>
+        </nav>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">TEAM ASTROLYTICS</h1>
+            <p class="hero-subtitle">Exploring the Upper Atmosphere, One Launch at a Time.</p>
+            <a href="#model" class="cta-button">Explore the 3D Model</a>
+        </div>
+    </section>
+    
+    <main class="content-wrapper">
+        
+        <section id="model" class="content-section">
+            <h2><span class="highlight">02</span>INTERACTIVE MODEL</h2>
+            <p>Get a hands-on look at our design. Click and drag the model below to explore every component in detail. This is where your Spline or Three.js viewer will go.</p>
+            <div class="spline-container">
+                <p class="placeholder-text">Your 3D Model Viewer Goes Here</p>
+            </div>
+             </section>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Team Astrolytics | Mission Control</p>
+    </footer>   
+</footer>
+
+    <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
+
+    <script>
+        // !! PASTE THE URN YOU COPIED FROM THE UPLOAD STEP !!
+        const MY_MODEL_URN = "YOUR_URN_HERE";
+
+        let viewer;
+
+        // 1. Get an access token from our backend server
+        async function getAccessToken() {
+            try {
+                // This asks your running Node.js server for a token
+                const resp = await fetch('/api/auth/token'); 
+                if (!resp.ok) {
+                    throw new Error(await resp.text());
+                }
+                const { access_token, expires_in } = await resp.json();
+                return { access_token, expires_in };
+            } catch (err) {
+                alert('Could not get access token. Is the backend server running?');
+                console.error(err);
+            }
+        }
+
+        // 2. Initialize the viewer
+        function initializeViewer() {
+            const options = {
+                env: 'AutodeskProduction',
+                getAccessToken: async (onTokenReady) => {
+                    const token = await getAccessToken();
+                    if (token) {
+                        onTokenReady(token.access_token, token.expires_in);
+                    }
+                }
+            };
+
+            Autodesk.Viewing.Initializer(options, () => {
+                // This ID must match the <div> you created in Step 2
+                const viewerDiv = document.getElementById('my-cansat-viewer');
+                viewer = new Autodesk.Viewing.GuiViewer3D(viewerDiv);
+                viewer.start();
+                loadModel(MY_MODEL_URN);
+            });
+        }
+
+        // 3. Load the model
+        function loadModel(urn) {
+            const documentId = 'urn:' + urn;
+            Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+        }
+
+        function onDocumentLoadSuccess(doc) {
+            const viewables = doc.getRoot().getDefaultGeometry();
+            viewer.loadDocumentNode(doc, viewables).then(i => {
+                console.log('Model loaded successfully.');
+            });
+        }
+
+        function onDocumentLoadFailure(viewerErrorCode) {
+            console.error('onDocumentLoadFailure() - ' + viewerErrorCode);
+        }
+
+        // --- Start everything ---
+        initializeViewer();
+
+    </script>
+</body>
 </html>
+
+

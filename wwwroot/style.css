@@ -1,0 +1,219 @@
+/* ---- GLOBAL STYLES & VARIABLES ---- */
+:root {
+    --primary-color: #0d0f1a; /* Deep space blue */
+    --secondary-color: #1a1c2d;
+    --accent-color: #00aaff; /* Bright cyan accent */
+    --glow-color: rgba(0, 170, 255, 0.5);
+    --text-color: #e0e0e0; /* Light grey text */
+    --title-font: 'Orbitron', sans-serif;
+    --body-font: 'Exo 2', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--body-font);
+    background-color: var(--primary-color);
+    background-image: url('background1.jpg'); /* Your starry background */
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--text-color);
+    overflow-x: hidden;
+}
+
+/* ---- HEADER & NAVIGATION ---- */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    z-index: 100;
+    background: rgba(13, 15, 26, 0.5); /* Semi-transparent */
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 170, 255, 0.2);
+}
+
+.logo {
+    font-family: var(--title-font);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 10px var(--glow-color);
+}
+
+.main-nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+
+.main-nav a:hover {
+    color: var(--accent-color);
+    text-shadow: 0 0 5px var(--glow-color);
+}
+
+/* ---- HERO SECTION ---- */
+.hero-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+    padding: 0 5%;
+    position: relative;
+    background: linear-gradient(to bottom, rgba(13, 15, 26, 0) 0%, var(--primary-color) 95%);
+}
+
+.hero-title {
+    font-family: var(--title-font);
+    font-size: 5rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 5px;
+    text-shadow: 0 0 15px var(--glow-color), 0 0 25px var(--glow-color);
+    animation: fadeInDown 1.5s ease-out;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: var(--text-color);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fadeInUp 1.5s ease-out;
+}
+
+/* ---- CALL TO ACTION BUTTON ---- */
+.cta-button {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 30px;
+    border: 2px solid var(--accent-color);
+    border-radius: 50px;
+    color: #fff;
+    background-color: transparent;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: var(--title-font);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px var(--glow-color);
+    animation: fadeInUp 1.8s ease-out;
+}
+
+.cta-button:hover {
+    background-color: var(--accent-color);
+    box-shadow: 0 0 25px var(--glow-color), 0 0 35px var(--glow-color);
+    transform: translateY(-3px);
+}
+
+/* ---- CONTENT SECTIONS ---- */
+.content-wrapper {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.content-section {
+    background: rgba(26, 28, 45, 0.8);
+    backdrop-filter: blur(5px);
+    padding: 40px;
+    margin-bottom: 50px;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 170, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.content-section h2 {
+    font-family: var(--title-font);
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #fff;
+    border-bottom: 2px solid var(--accent-color);
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.content-section p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.highlight {
+    color: var(--accent-color);
+    margin-right: 15px;
+}
+
+/* ---- 3D MODEL CONTAINER ---- */
+.spline-container {
+    width: 100%;
+    height: 500px; 
+    margin-top: 30px;
+    border-radius: 10px;
+    overflow: hidden; 
+    background-color: var(--primary-color);
+    border: 1px solid rgba(0, 170, 255, 0.3);
+}
+
+/* ---- 3D MODEL CONTAINER ---- */
+#my-cansat-viewer {
+    width: 100%;
+    height: 500px; /* This height is perfect! */
+    margin-top: 30px;
+    border-radius: 10px;
+    overflow: hidden; 
+    background-color: var(--primary-color);
+    border: 1px solid rgba(0, 170, 255, 0.3);
+    
+    /* ADD THIS LINE: It's required by the viewer */
+    position: relative; 
+}
+
+/* ---- FOOTER ---- */
+.main-footer {
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid rgba(0, 170, 255, 0.2);
+    background: rgba(13, 15, 26, 0.7);
+}
+
+/* ---- ANIMATIONS ---- */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+
+
+    
+}
