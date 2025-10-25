@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Astrolytics | Design</title> 
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .logo-image {
+            height: 60px; 
+            width: auto;
+            vertical-align: middle;
+        } 
+        /* This adds space so content isn't hidden behind the fixed header */
+        .content-wrapper {
+             margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <img src="logo.png" alt="Team Astrolytics Logo" class="logo-image">
+        </div>
+        <nav class="main-nav">
+            <a href="index.html">Home</a> <a href="mission.html">Mission</a> 
+            <a href="design.html">Design</a>
+            <a href="data.html">Launch Data</a>
+            <a href="team.html">The Team</a>
+        </nav>
+    </header>
+
+    
+    <main class="content-wrapper">
+        
+        <section id="model" class="content-section">
+            <h2><span class="highlight">01</span>INTERACTIVE DESIGN</h2>
+            <p>Get a hands-on look at our CanSat. Click, zoom, and drag the model below to explore every component in 3D detail.</p>
+            
+            <div id="my-cansat-viewer">
+                <iframe 
+                    src="https://gmail5700109.autodesk360.com/shares/public/SH28cd1QT2badd0ea72bf4474c4acca443b4?mode=embed"  
+                    width="100%" 
+                    height="100%" 
+                    allowfullscreen="true" 
+                    frameborder="0">
+                </iframe>
+            </div>
+         </section>
+         
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Team Astrolytics | Mission Control</p>
+    </footer>
+
+</body>
+</html>
