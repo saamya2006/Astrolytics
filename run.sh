@@ -1,0 +1,4 @@
+export APS_CLIENT_ID="oiXGwiMBWhgUJkNueV4rDu8SQWB9xIKYGCXAq3Qc0L5xhv3m"
+export APS_CLIENT_SECRET="3yKY8aTl8QCew2YEwktcZSCl5ThxPSdJM8S0gouEzbaR32v6f2GuvucBG1LWbTIy"
+
+npm start
