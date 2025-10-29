@@ -12,17 +12,111 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
+        /* Define root variables if not in style.css, for consistency */
+        :root {
+            --bg-color: #0d0f1a;
+            --card-border: #3a3a5a;
+            --accent-primary: #00aaff;
+            --text-primary: #f0f0f5;
+        }
+
+        /* General body styling for background/text (if not in style.css) */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+        }
+
+        /* --- Logo Styling --- */
         .logo-image {
             height: 60px; 
             width: auto;
             vertical-align: middle;
+            transition: all 0.3s ease-in-out; /* Added transition */
         } 
+        /* Added Logo Hover */
+        .logo-image:hover {
+            transform: scale(1.1) rotate(-5deg);
+            filter: drop-shadow(0 0 15px #00aaff) drop-shadow(0 0 5px #fff);
+        }
+
+        /* --- Header Styling (if not in style.css) --- */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(13, 15, 26, 0.95);
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        /* --- Navigation Styling --- */
+        .main-nav a {
+            color: var(--text-primary); /* Use variable for consistency */
+            text-decoration: none;
+            margin: 0 10px; /* Standardized margin */
+            font-weight: 400;
+            font-family: 'Orbitron', sans-serif; /* Standardized font */
+            transition: all 0.3s ease-in-out;
+        }
+        /* Added Nav Links Hover */
+        .main-nav a:hover {
+            color: #fff;
+            transform: scale(1.15);
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px var(--accent-primary), /* Use variable */
+                0 0 30px var(--accent-primary);
+        }
+        .main-nav a.active {
+            color: var(--accent-primary); /* Highlight active link */
+            font-weight: 700;
+            text-shadow: 0 0 10px var(--accent-primary);
+        }
+
+        /* --- Content Section Title Styling --- */
+        .content-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease-in-out; /* Added transition */
+        }
+        /* Added Section Title Hover */
+        .content-section h2:hover {
+            color: #fff;
+            transform: skewX(-15deg) scale(1.05);
+            text-shadow: 
+                0 0 10px #00e1ff, /* Electric Green */
+                0 0 20px #00ccff;
+        }
+        .content-section .highlight {
+            color: var(--accent-primary);
+            margin-right: 10px;
+        }
+        .content-section p {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+
         .content-wrapper {
-             margin-top: 100px;
+            margin-top: 100px;
+            padding: 20px 0; /* Add some padding around the content */
         }
 
         /* --- STYLES FOR THE TOP TWO MODELS --- */
-        
         #models {
             width: 100vw; 
             max-width: 100vw; 
@@ -31,10 +125,15 @@
             transform: translateX(-50%);
             padding: 0; 
             box-sizing: border-box; 
+            display: flex; /* Ensure flex for columns on desktop */
+            justify-content: center; /* Center if content is narrower */
         }
         
         .two-column-layout {
             display: flex;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            width: 100%; /* Take full width of parent */
+            max-width: 1200px; /* Optional: max width for desktop layout */
         }
 
         .model-column-left,
@@ -42,6 +141,7 @@
             flex: 1; 
             padding: 0 15px; 
             box-sizing: border-box; 
+            min-width: 300px; /* Prevent columns from getting too small */
         }
 
         .cansat-viewer {
@@ -49,18 +149,67 @@
             height: 650px; 
             border-radius: 8px;
             overflow: hidden;
-            border: 1px solid #333;
+            border: 1px solid var(--card-border); /* Use variable for border */
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.2); /* Subtle initial glow */
+            transition: all 0.3s ease-in-out; /* Added transition for hover */
+        }
+        /* Added Cansat Viewer Hover */
+        .cansat-viewer:hover {
+            transform: scale(1.01); /* Slight zoom on hover */
+            border-color: var(--accent-primary); /* Highlight border */
+            box-shadow: 
+                0 0 20px var(--accent-primary),
+                inset 0 0 10px rgba(0, 170, 255, 0.5); /* Inner glow */
         }
         
         /* --- NEW: STYLES FOR THE BOTTOM MODEL --- */
         #bottom-model {
             text-align: center; /* Centers the h2 and p tags */
-            padding-top: 60px;  /* Adds space after the full-width section */
+            padding-top: 60px; /* Adds space after the full-width section */
+            max-width: 1200px; /* Match max-width of top section if desired */
+            margin: 0 auto; /* Center the section itself */
+            padding-bottom: 80px; /* Space before footer */
+        }
+        #bottom-model .cansat-viewer {
+            max-width: 900px; /* Limit width of bottom viewer for aesthetic */
+            margin: 0 auto; /* Center the bottom viewer */
         }
 
+        /* --- Footer Styling --- */
+        .main-footer {
+            text-align: center;
+            padding: 20px 40px;
+            background-color: rgba(13, 15, 26, 0.95);
+            border-top: 1px solid var(--card-border);
+            color: var(--text-primary);
+            position: relative;
+            z-index: 10;
+        }
+        .main-footer p {
+            margin: 0;
+            transition: all 0.3s ease-in-out; /* Added transition */
+        }
+        /* Added Footer Hover */
+        .main-footer:hover p {
+            color: #fff;
+            text-shadow: 0 0 10px #fff, 0 0 15px var(--accent-primary);
+        }
 
         /* --- For small screens (mobile) --- */
         @media (max-width: 768px) {
+            .main-header {
+                padding: 0 20px;
+            }
+            .main-nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .main-nav a {
+                margin: 5px 8px;
+            }
+
             #models {
                 width: auto;
                 max-width: 100%;
@@ -83,6 +232,13 @@
             .cansat-viewer {
                  height: 500px; 
             }
+
+            .content-section h2 {
+                font-size: 2rem;
+            }
+            .content-section p {
+                font-size: 1rem;
+            }
         }
         
     </style>
@@ -94,12 +250,12 @@
             <img src="logo.png" alt="Team Astrolytics Logo" class="logo-image">
         </div>
         <nav class="main-nav">
-            <a href="index.html">Home</a> <a href="mission.html">Mission</a> 
-            <a href="design.html">Design</a>
+            <a href="index.html">Home</a> 
+            <a href="mission.html">Mission</a> 
+            <a href="design.html" class="active">Design</a>
+            <a href="document.html">Documentation</a> 
             <a href="data.html">Launch Data</a>
             <a href="team.html">The Team</a>
-            <a href="document.html">Documentation</a> 
-            
         </nav>
     </header>
 
@@ -129,7 +285,7 @@
                 
                 <div class="cansat-viewer">
                     <iframe 
-                        src="https://gmail5700109.autodesk360.com/shares/public/SH28cd1QT2badd0ea72bbbbf891fc0d4d4f4?mode=embed"   
+                        src="https://gmail5700109.autodesk360.com/shares/public/SH28cd1QT2badd0ea72bbbbf891fc0d4d4f4?mode=embed"  
                         width="100%" 
                         height="100%" 
                         allowfullscreen="true" 
@@ -140,7 +296,7 @@
             
         </section>
         <section id="bottom-model" class="content-section">
-            <h2><span class="highlight">03</span> Design</h2>
+            <h2><span class="highlight">03</span>Full Design</h2>
             <p>View the complete CanSat assembly from all angles.</p>
 
             <div class="cansat-viewer">

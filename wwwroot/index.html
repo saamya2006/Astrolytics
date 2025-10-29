@@ -40,9 +40,17 @@
         }
 
         /* 2. Nav Links Hover */
+        
+        /* === THIS RULE IS NOW IDENTICAL TO document.html === */
         .main-nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 400;
+            font-family: 'Orbitron', sans-serif;
             transition: all 0.3s ease-in-out;
         }
+        
         .main-nav a:hover {
             color: #fff;
             transform: scale(1.15);
@@ -109,8 +117,8 @@
             color: #fff;
             transform: skewX(-15deg) scale(1.05);
             text-shadow: 
-                0 0 10px #00ff00, /* Electric Green */
-                0 0 20px #00ff00;
+                0 0 10px #00fff2, /* Electric Green */
+                0 0 20px #00e1ff;
         }
         
         /* 7. 3D Model Placeholder Hover */
@@ -153,8 +161,8 @@
             <a href="index.html">Home</a> 
             <a href="mission.html">Mission</a> 
             <a href="design.html">Design</a>
-            <a href="data.html">Launch Data</a>
             <a href="document.html">Documentation</a>
+            <a href="data.html">Launch Data</a>
             <a href="team.html">The Team</a>
         </nav>
     </header>
