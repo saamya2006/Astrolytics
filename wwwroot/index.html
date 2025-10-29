@@ -10,14 +10,134 @@
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
 
     <style>
         .logo-image {
             height: 60px; 
             width: auto;
             vertical-align: middle;
+            /* Add transition for hover effect */
+            transition: all 0.3s ease-in-out;
         } 
+
+        /* --- START OF HOVER EFFECTS --- */
+
+        /* Define a "crazy shake" animation */
+        @keyframes crazy-shake {
+            0% { transform: translate(0, 0) rotate(0); }
+            20% { transform: translate(-3px, 0px) rotate(-1deg); }
+            40% { transform: translate(3px, 0px) rotate(1deg); }
+            60% { transform: translate(-3px, 0px) rotate(0deg); }
+            80% { transform: translate(3px, 0px) rotate(-1deg); }
+            100% { transform: translate(0, 0) rotate(0); }
+        }
+
+        /* 1. Logo Hover */
+        .logo-image:hover {
+            transform: scale(1.1) rotate(-5deg);
+            filter: drop-shadow(0 0 15px #00aaff) drop-shadow(0 0 5px #fff);
+        }
+
+        /* 2. Nav Links Hover */
+        .main-nav a {
+            transition: all 0.3s ease-in-out;
+        }
+        .main-nav a:hover {
+            color: #fff;
+            transform: scale(1.15);
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px #00aaff,
+                0 0 30px #00aaff;
+        }
+
+        /* 3. Hero Title (CYAN NEON EFFECT) */
+        .hero-title {
+            transition: all 0.3s ease-in-out;
+            /* Base static cyan neon effect */
+            color: #d0ffff; /* Light cyan base text */
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #00ffff,
+                0 0 15px #00ffff;
+        }
+        
+        /* --- THIS IS THE UPDATED/REDUCED EFFECT --- */
+        .hero-title:hover {
+            /* Reduced "lightning" effect */
+            color: #fff; /* Bright white "hot" core */
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 15px #fff,     /* Reduced white core */
+                0 0 30px #00ffff, /* Reduced cyan aura */
+                0 0 50px #00ffff; /* Reduced faintest glow */
+        }
+        
+        /* 4. Hero Subtitle Hover (Crazy Shake) */
+        .hero-subtitle {
+             transition: all 0.3s ease-in-out;
+        }
+        .hero-subtitle:hover {
+            color: #00ff00; /* Electric Green */
+            animation: crazy-shake 0.5s cubic-bezier(.36,.07,.19,.97) both infinite;
+        }
+
+        /* 5. CTA Button Hover */
+        .cta-button {
+            transition: all 0.3s ease-in-out;
+            /* Base shadow to transition from */
+            box-shadow: 0 0 0 rgba(0, 170, 255, 0); 
+        }
+        .cta-button:hover {
+            background-color: #00aaff;
+            color: #000;
+            transform: scale(1.1);
+            box-shadow: 
+                0 0 15px #00aaff,
+                0 0 30px #00aaff,
+                0 0 50px #fff;
+        }
+
+        /* 6. Section Title Hover */
+        .content-section h2 {
+            transition: all 0.3s ease-in-out;
+        }
+        .content-section h2:hover {
+            color: #fff;
+            transform: skewX(-15deg) scale(1.05);
+            text-shadow: 
+                0 0 10px #00ff00, /* Electric Green */
+                0 0 20px #00ff00;
+        }
+        
+        /* 7. 3D Model Placeholder Hover */
+        .spline-container {
+             /* Assuming it has a base color/border in style.css */
+            transition: all 0.3s ease-in-out;
+            border: 2px dashed #555; /* Example base border */
+        }
+        .spline-container:hover {
+            transform: scale(1.02);
+            border-color: #00eeff;
+            box-shadow: 
+                0 0 20px #00ffff,
+                inset 0 0 20px #00f7ff; /* Inner glow */
+        }
+
+        /* 8. Footer Hover */
+        .main-footer p {
+            transition: all 0.3s ease-in-out;
+        }
+        .main-footer:hover p {
+            color: #fff;
+            text-shadow: 0 0 10px #fff, 0 0 15px #00aaff;
+        }
+
+        /* --- END OF HOVER EFFECTS --- */
+
     </style>
 </head>
 <body>
@@ -30,11 +150,12 @@
             <img src="logo.png" alt="Team Astrolytics Logo" class="logo-image">
         </div>
         <nav class="main-nav">
+            <a href="index.html">Home</a> 
             <a href="mission.html">Mission</a> 
             <a href="design.html">Design</a>
             <a href="data.html">Launch Data</a>
-            <a href="documents.html">Documents</a>
-
+            <a href="document.html">Documentation</a>
+            <a href="team.html">The Team</a>
         </nav>
     </header>
 
@@ -59,13 +180,7 @@
 
     <footer class="main-footer">
         <p>&copy; 2025 Team Astrolytics | Mission Control</p>
-    </footer>   
-</footer>
-
+    </footer> 
     
-
-   
 </body>
 </html>
-
-

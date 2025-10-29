@@ -3,32 +3,785 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data| Home</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Can-sat Dashboard (Real-Time)</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* --- Import Font --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        /* --- Global Styles & Dark Theme --- */
+        :root {
+            --bg-color: #1a1a2e;
+            --card-bg: #2c2c44;
+            --card-border: #3a3a5a;
+            --text-primary: #f0f0f5;
+            --text-secondary: #b0b0d0;
+            --accent-primary: #4d9eff;
+            --accent-secondary: #00f0ff;
+            --accent-tertiary: #ff6384; 
+            --accent-quaternary: #ffcd56;
+            --status-pass: #28a745; /* This is the green we will use */
+            --status-fail: #dc3545;
+            --status-pending: #ffc107;
+            --status-pass-bg: rgba(40, 167, 69, 0.1);
+            --status-fail-bg: rgba(220, 53, 69, 0.1);
+            --status-pending-bg: rgba(255, 193, 7, 0.1);
+            
+            /* This variable is not needed by JS anymore, but kept for consistency */
+            --accent-green: #28a745; 
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 24px;
+        }
+
+        h1 {
+            text-align: left;
+            margin-bottom: 24px;
+            color: var(--accent-primary);
+            font-size: 2.2rem;
+            transition: all 0.3s ease-out;
+            cursor: default;
+        }
+
+        /* --- Global Header Lighting Effect for h1 and h2 --- */
+        h1:hover, 
+        h2:hover { 
+            color: transparent; 
+            background-image: linear-gradient(
+                90deg, 
+                var(--accent-primary),
+                var(--accent-secondary),
+                #ffffff,              
+                var(--accent-secondary),
+                var(--accent-primary)
+            );
+            background-size: 300% 100%; 
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: light-scan 2.5s linear infinite;
+        }
+        
+        @keyframes light-scan {
+            0% { background-position: 250% center; }
+            100% { background-position: -150% center; }
+        }
+        /* --- End of Global Effect --- */
+
+
+        /* --- Dashboard Grid Layout --- */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 20px;
+        }
+
+        /* --- Card Styling --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-left: 4px solid var(--card-border);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--card-border);
+            color: var(--accent-secondary);
+            font-size: 1.25rem;
+            transition: all 0.3s ease-out;
+            cursor: default;
+        }
+        
+        /* --- Chart Containers --- */
+        .chart-container {
+            position: relative;
+            height: 250px; 
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .chart-row {
+            display: flex;
+            gap: 16px;
+            width: 100%;
+        }
+        .chart-row .chart-container {
+            height: 200px;
+            width: 50%;
+        }
+        
+        .chart-container.small {
+            height: 150px;
+            width: 150px;
+            margin: 16px auto;
+            flex-grow: 0;
+        }
+
+        /* --- Custom Gauge Styling --- */
+        .gauge-container {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .gauge {
+            width: 100px;
+            height: 50px;
+            border-top-left-radius: 100px;
+            border-top-right-radius: 100px;
+            position: relative;
+            background: var(--card-border);
+            overflow: hidden;
+        }
+        
+        .gauge-fill {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--status-pass);
+            transform-origin: center bottom;
+            transition: transform 0.5s ease-out;
+        }
+        
+        .gauge-cover {
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            background: var(--card-bg);
+            border-top-left-radius: 80px;
+            border-top-right-radius: 80px;
+            top: 10px;
+            left: 10px;
+        }
+        
+        .gauge-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: -30px;
+            position: relative;
+            z-index: 2;
+        }
+        .gauge-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+
+        /* --- Status Light Styling --- */
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .status-grid.single-column {
+             grid-template-columns: 1fr;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .status-light {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .status-ok { background-color: var(--status-pass); box-shadow: 0 0 8px var(--status-pass); }
+        .status-warn { background-color: var(--status-pending); box-shadow: 0 0 8px var(--status-pending); }
+        .status-fail { background-color: var(--status-fail); box-shadow: 0 0 8px var(--status-fail); }
+        .status-label { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
+        .status-value { font-size: 0.85rem; color: var(--text-secondary); }
+
+        /* --- Checklist Styling (from previous) --- */
+        .card ul { list-style: none; padding: 0; margin: 0; }
+        .checklist-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5px;
+            border-bottom: 1px solid var(--card-border);
+            font-size: 0.9rem;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s ease;
+        }
+        .checklist-item:hover { background-color: rgba(255, 255, 255, 0.05); }
+        .checklist-item .key { color: var(--text-secondary); }
+        .status { font-weight: 700; padding: 4px 8px; border-radius: 6px; font-size: 0.85rem; }
+        .status-pending { background-color: var(--status-pending-bg); color: var(--status-pending); }
+        .status-pass { background-color: var(--status-pass-bg); color: var(--status-pass); }
+        .status-fail { background-color: var(--status-fail-bg); color: var(--status-fail); }
+
+    </style>
 </head>
 <body>
 
-    <header>
-        <h1>The Can-Satellite Project</h1>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="project-details.html">Project Details</a>
-            <a href="design.html">Design</a>
-            <a href="data.html">Launch & Data</a>
-            <a href="team.html">The Team</a>
-        </nav>
-    </header>
+    <h1>Can-sat Dashboard</h1>
 
-    <main>
-        <h2>Welcome to Our Aerodynamics Project</h2>
-        <p>Discover the journey of designing, building, and launching our very own Can-Satellite.</p>
-        <img src="images/cansat-hero.jpg" alt="Photo of our Can-Satellite" style="width:100%; max-width:600px;">
-    </main>
+    <div class="dashboard-container">
 
-    <footer>
-        <p>&copy; 2025 Your Team Name</p>
-    </footer>
+        <div class="card">
+            <h2>Mission Data</h2>
+            <div class="status-grid single-column">
+                <div class="status-item">
+                    <div>
+                        <div class="status-label">Team ID</div>
+                        <div class="status-value" id="data-team-id">1000</div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div>
+                        <div class="status-label">Mission Time (UTC)</div>
+                        <div class="status-value" id="data-mission-time">00:00:00</div>
+                    </div>
+                </div>
+                 <div class="status-item">
+                    <div>
+                        <div class="status-label">Packet Count</div>
+                        <div class="status-value" id="data-packet-count">0</div>
+                    </div>
+                </div>
+                 <div class="status-item">
+                    <div>
+                        <div class="status-label">Last Command Echo</div>
+                        <div class="status-value" id="data-cmd-echo">CXON</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Altitude (Sensor vs. GPS)</h2>
+            <div class="chart-container">
+                <canvas id="altitudeChart"></canvas>
+            </div>
+        </div>
 
-    <script src="js/main.js"></script>
+        <div class="card">
+            <h2>Environment</h2>
+            <div class="chart-row">
+                <div class="chart-container">
+                    <canvas id="tempChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="pressureChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>IMU - Gyroscope (deg/s)</h2>
+            <div class="chart-container">
+                <canvas id="gyroChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>IMU - Accelerometer (deg/s²)</h2>
+            <div class="chart-container">
+                <canvas id="accelChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Power & Battery</h2>
+            <div class="gauge-container">
+                <div>
+                    <div class="gauge">
+                        <div class="gauge-fill" id="gauge-fill-voltage" style="transform: rotate(0deg);"></div>
+                        <div class="gauge-cover"></div>
+                        <div class="gauge-label" id="data-voltage">0.0V</div>
+                    </div>
+                    <div class="gauge-title">Voltage</div>
+                </div>
+                <div>
+                    <div class="gauge">
+                        <div class="gauge-fill" id="gauge-fill-current" style="transform: rotate(0deg);"></div>
+                        <div class="gauge-cover"></div>
+                        <div class="gauge-label" id="data-current">0.00A</div>
+                    </div>
+                    <div class="gauge-title">Current</div>
+                </div>
+            </div>
+            <div class="chart-container small">
+                <canvas id="batteryCapacityChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>GNSS & Navigation Status</h2>
+            <div class="chart-container" style="height: 200px;">
+                <canvas id="gpsAltitudeOnlyChart"></canvas>
+            </div>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div>
+                        <div class="status-label">GPS Time</div>
+                        <div class="status-value" id="data-gps-time">00:00:00 UTC</div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div>
+                        <div class="status-label">GPS Altitude</div>
+                        <div class="status-value" id="data-gps-altitude">0.0 m</div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div>
+                        <div class="status-label">GPS Latitude</div>
+                        <div class="status-value" id="data-gps-lat">0.0000</div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div>
+                        <div class="status-label">GPS Longitude</div>
+                        <div class="status-value" id="data-gps-lon">0.0000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>System Status</h2>
+            <div class="status-grid single-column">
+                <div class="status-item">
+                    <div class="status-light status-warn" id="light-state"></div>
+                    <div>
+                        <div class="status-label">Flight State</div>
+                        <div class="status-value" id="data-state">LAUNCH_PAD</div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-light status-ok" id="light-mode"></div>
+                    <div>
+                        <div class="status-label">Operating Mode</div>
+                        <div class="status-value" id="data-mode">S (Simulation)</div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-light status-ok"></div>
+                    <div>
+                        <div class="status-label">SD Card Logging</div>
+                        <div class="status-value">OK / Logging Enabled</div>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-light status-ok"></div>
+                    <div>
+                        <div class="status-label">Telemetry Link</div>
+                        <div class="status-value">LoRa 433 MHz / GS_01</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Pre-launch Checklist</h2>
+            <div class="chart-container small">
+                <canvas id="checklistProgressChart"></canvas>
+            </div>
+            <ul id="checklist-list">
+                <li class="checklist-item"><span class="key">Batteries charged</span><span class="status status-pending">PENDING</span></li>
+                <li class="checklist-item"><span class="key">GNSS antenna clear</span><span class="status status-pending">PENDING</span></li>
+                <li class="checklist-item"><span class="key">Telemetry link checked</span><span class="status status-pending">PENDING</span></li>
+                <li class="checklist-item"><span class="key">Flight code version (v1.2.0)</span><span class="status status-pending">PENDING</span></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Global Chart Variables ---
+        let batteryCapacityChart, checklistProgressChart;
+        let altitudeChart, tempChart, pressureChart, gyroChart, accelChart, gpsAltitudeOnlyChart;
+
+        // --- Global Chart Config ---
+        const MAX_DATA_POINTS = 50; 
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.color = 'rgba(240, 240, 245, 0.7)';
+        Chart.defaults.borderColor = 'rgba(58, 58, 90, 0.5)';
+
+        // --- Custom Center-Text Plugin (from original) ---
+        const centerTextPlugin = {
+          id: 'centerText',
+          afterDraw: (chart) => {
+            if (chart.config.type !== 'doughnut') return;
+            const customOptions = chart.config.options.plugins.centerText;
+            const text = customOptions?.text;
+            if (!text) return;
+            const ctx = chart.ctx;
+            const chartArea = chart.chartArea;
+            const x = (chartArea.left + chartArea.right) / 2;
+            const y = (chartArea.top + chartArea.bottom) / 2;
+            ctx.save();
+            ctx.font = `${customOptions?.font?.style || 'normal'} ${customOptions?.font?.weight || '700'} ${customOptions?.font?.size || 24}px ${customOptions?.font?.family || "'Inter', sans-serif"}`;
+            ctx.fillStyle = customOptions?.color || '#f0f0f5';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, x, y);
+            ctx.restore();
+          }
+        };
+        Chart.register(centerTextPlugin);
+
+        /**
+         * Helper function to add new data to a chart and trim old data.
+         */
+        function addDataToChart(chart, label, data) {
+            chart.data.labels.push(label);
+            
+            data.forEach((d, index) => {
+                 chart.data.datasets[index].data.push(d);
+            });
+
+            if (chart.data.labels.length > MAX_DATA_POINTS) {
+                chart.data.labels.shift();
+                chart.data.datasets.forEach(dataset => {
+                    dataset.data.shift();
+                });
+            }
+            chart.update('none'); // Update without animation
+        }
+        
+        /**
+         * Helper to create a standard line chart config
+         */
+        //
+        // ===================================================================
+        // --- MODIFIED: createLineChart function ---
+        // This function now uses a hardcoded map to resolve color names
+        // into hex codes, ensuring Chart.js renders them correctly.
+        // ===================================================================
+        function createLineChart(ctx, title, datasetLabels, colorNames) {
+             
+             // This map translates the color names (like '--accent-green')
+             // into the actual hex codes Chart.js needs.
+             const colorMap = {
+                '--accent-green': '#28a745',
+                '--accent-primary': '#4d9eff',
+                '--accent-secondary': '#00f0ff',
+                '--accent-tertiary': '#ff6384',
+                '--accent-quaternary': '#ffcd56'
+             };
+
+             const datasets = datasetLabels.map((label, index) => {
+                const colorKey = colorNames[index];
+                const hexColor = colorMap[colorKey] || '#ffffff'; // Default to white if key not found
+                
+                return {
+                    label: label,
+                    data: [],
+                    borderColor: hexColor,             // Directly use the hex code
+                    backgroundColor: hexColor + '33', // Use hex code + opacity
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0.1
+                };
+             });
+            
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            ticks: { display: false }, 
+                            grid: { color: 'rgba(58, 58, 90, 0.5)' }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            grid: { color: 'rgba(58, 58, 90, 0.5)' }
+                        }
+                    },
+                    plugins: {
+                        legend: { 
+                            display: datasetLabels.length > 1, 
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 10
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: title,
+                            font: { size: 16 },
+                            padding: { bottom: 10 }
+                        }
+                    }
+                }
+            });
+        }
+        
+        
+        // --- Wait for DOM to load before creating charts ---
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. Battery Capacity Donut Chart (Original) ---
+            batteryCapacityChart = new Chart(document.getElementById('batteryCapacityChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Capacity', 'Empty'],
+                    datasets: [{
+                        data: [95, 5],
+                        backgroundColor: ['#4d9eff', '#3a3a5a'],
+                        borderColor: '#2c2c44',
+                        borderWidth: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false }, 
+                        tooltip: { enabled: false },
+                        centerText: {
+                            text: '95%',
+                            color: '#f0f0f5',
+                            font: { size: 24, weight: '700' }
+                        }
+                    }
+                }
+            });
+
+            // --- 2. GPS Altitude Line Chart ---
+            // The call is the same, but the function inside is now fixed
+            gpsAltitudeOnlyChart = createLineChart(
+                document.getElementById('gpsAltitudeOnlyChart').getContext('2d'),
+                'GPS Altitude (m)',
+                ['GPS Alt'],
+                ['--accent-green'] 
+            );
+            
+            // --- 3. Checklist Progress Chart (Original) ---
+            const checklistCtx = document.getElementById('checklistProgressChart').getContext('2d');
+            const totalItems = document.querySelectorAll('#checklist-list .checklist-item').length;
+            checklistProgressChart = new Chart(checklistCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Complete', 'Pending'],
+                    datasets: [{
+                        data: [0, totalItems],
+                        backgroundColor: ['#28a745', '#3a3a5a'],
+                        borderColor: '#2c2c44',
+                        borderWidth: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false },
+                        tooltip: { enabled: false },
+                        centerText: {
+                            text: `0 / ${totalItems}`,
+                            color: '#f0f0f5',
+                            font: { size: 24, weight: '700' }
+                        }
+                    }
+                }
+            });
+
+            // --- 4. Altitude Chart ---
+            altitudeChart = createLineChart(
+                document.getElementById('altitudeChart').getContext('2d'),
+                'Altitude (m)',
+                ['Sensor Alt', 'GPS Alt'],
+                ['--accent-green', '--accent-quaternary'] 
+            );
+
+            // --- 5. Environment Charts ---
+            tempChart = createLineChart(
+                document.getElementById('tempChart').getContext('2d'),
+                'Temperature (°C)',
+                ['Temp'],
+                ['--accent-green'] 
+            );
+            pressureChart = createLineChart(
+                document.getElementById('pressureChart').getContext('2d'),
+                'Pressure (kPa)',
+                ['Pressure'],
+                ['--accent-green'] 
+            );
+            
+            // --- 6. Gyroscope Chart ---
+            gyroChart = createLineChart(
+                document.getElementById('gyroChart').getContext('2d'),
+                'Gyroscope',
+                ['Roll (R)', 'Pitch (P)', 'Yaw (Y)'],
+                ['--accent-green', '--accent-tertiary', '--accent-quaternary'] 
+            );
+
+            // --- 7. Accelerometer Chart ---
+            accelChart = createLineChart(
+                document.getElementById('accelChart').getContext('2d'),
+                'Accelerometer',
+                ['Accel R', 'Accel P', 'Accel Y'],
+                ['--accent-green', '--accent-tertiary', '--accent-quaternary'] 
+            );
+
+
+            // --- Checklist Click Handler (Original) ---
+            document.getElementById('checklist-list').addEventListener('click', function(e) {
+                const item = e.target.closest('.checklist-item');
+                if (!item) return;
+                const statusElement = item.querySelector('.status');
+                let currentState = statusElement.classList.contains('status-pending') ? 'pending' :
+                                   (statusElement.classList.contains('status-pass') ? 'pass' : 'fail');
+                
+                switch (currentState) {
+                    case 'pending':
+                        statusElement.textContent = 'PASS';
+                        statusElement.className = 'status status-pass';
+                        break;
+                    case 'pass':
+                        statusElement.textContent = 'FAIL';
+                        statusElement.className = 'status status-fail';
+                        break;
+                    case 'fail':
+                        statusElement.textContent = 'PENDING';
+                        statusElement.className = 'status status-pending';
+                        break;
+                }
+                updateChecklistChart();
+            });
+
+            function updateChecklistChart() {
+                const completedCount = document.querySelectorAll('#checklist-list .status-pass').length;
+                const pendingCount = totalItems - completedCount;
+                checklistProgressChart.data.datasets[0].data = [completedCount, pendingCount];
+                const centerTextOpts = checklistProgressChart.options.plugins.centerText;
+                centerTextOpts.text = `${completedCount} / ${totalItems}`;
+                centerTextOpts.color = (completedCount === totalItems) ? '#28a745' : '#f0f0f5';
+                checklistProgressChart.update();
+            }
+            
+            // --- Start the real-time simulation ---
+            setInterval(simulateDataUpdate, 2000); 
+            simulateDataUpdate(); 
+        });
+
+
+        // ===================================================================
+        // --- REAL-TIME DATA SIMULATION (Unchanged) ---
+        // ===================================================================
+        
+        let simPacketCount = 0;
+        let simAltitude = 10.0;
+        let simStateIndex = 0;
+        const simStates = ['LAUNCH_PAD', 'ASCENT', 'APOGEE', 'DESCENT', 'PROBE_RELEASE', 'PAYLOAD_RELEASE', 'LANDED'];
+        
+        function simulateDataUpdate() {
+            // --- Create Simulated Data ---
+            simPacketCount++;
+            simAltitude += (Math.random() - 0.4) * 5; 
+            if (simAltitude < 0) simAltitude = 0;
+            
+            const newTime = new Date().toLocaleTimeString('en-GB', { timeZone: 'UTC' });
+            
+            const packet = {
+                TEAM_ID: 1000,
+                MISSION_TIME: newTime,
+                PACKET_COUNT: simPacketCount,
+                MODE: 'S',
+                STATE: simStates[simStateIndex],
+                ALTITUDE: simAltitude.toFixed(1),
+                TEMPERATURE: (25.0 + (Math.random() - 0.5) * 2).toFixed(1),
+                PRESSURE: (101.3 + (Math.random() - 0.5) * 0.5).toFixed(1),
+                VOLTAGE: (7.4 + (Math.random() - 0.5) * 0.2).toFixed(2),
+                CURRENT: (0.35 + (Math.random() - 0.5) * 0.1).toFixed(2),
+                GYRO_R: (Math.random() * 10 - 5).toFixed(2),
+                GYRO_P: (Math.random() * 10 - 5).toFixed(2),
+                GYRO_Y: (Math.random() * 10 - 5).toFixed(2),
+                ACCEL_R: (Math.random() * 2 - 1).toFixed(2),
+                ACCEL_P: (Math.random() * 2 - 1).toFixed(2),
+                ACCEL_Y: (9.8 + (Math.random() - 0.5) * 0.1).toFixed(2),
+                GPS_TIME: newTime + " UTC",
+                GPS_ALTITUDE: (simAltitude + (Math.random() - 0.5) * 5).toFixed(1),
+                GPS_LATITUDE: (12.9716 + (Math.random() - 0.5) * 0.001).toFixed(4),
+                GPS_LONGITUDE: (77.5946 + (Math.random() - 0.5) * 0.001).toFixed(4),
+                GPS_SATS: Math.floor(Math.random() * 5) + 8,
+                CMD_ECHO: simPacketCount % 10 === 0 ? "CXON" : "SP101325"
+            };
+            
+            if (simPacketCount % 20 === 0) {
+                simStateIndex = (simStateIndex + 1) % simStates.length;
+            }
+
+            // --- Update Text & Status Fields ---
+            document.getElementById('data-team-id').textContent = packet.TEAM_ID;
+            document.getElementById('data-mission-time').textContent = packet.MISSION_TIME;
+            document.getElementById('data-packet-count').textContent = packet.PACKET_COUNT;
+            document.getElementById('data-cmd-echo').textContent = packet.CMD_ECHO;
+            
+            document.getElementById('data-state').textContent = packet.STATE;
+            document.getElementById('data-mode').textContent = packet.MODE === 'F' ? 'F (Flight)' : 'S (Simulation)';
+            
+            document.getElementById('data-gps-time').textContent = packet.GPS_TIME;
+            document.getElementById('data-gps-altitude').textContent = packet.GPS_ALTITUDE + ' m';
+            document.getElementById('data-gps-lat').textContent = packet.GPS_LATITUDE;
+            document.getElementById('data-gps-lon').textContent = packet.GPS_LONGITUDE;
+
+            // --- Update Gauges ---
+            const voltPercent = (packet.VOLTAGE - 6.0) / (8.4 - 6.0);
+            const voltAngle = Math.max(0, Math.min(1, voltPercent)) * 180;
+            document.getElementById('data-voltage').textContent = packet.VOLTAGE + 'V';
+            document.getElementById('gauge-fill-voltage').style.transform = `rotate(${voltAngle}deg)`;
+
+            const currentPercent = (packet.CURRENT - 0.0) / (1.0 - 0.0);
+            const currentAngle = Math.max(0, Math.min(1, currentPercent)) * 180;
+            document.getElementById('data-current').textContent = packet.CURRENT + 'A';
+            document.getElementById('gauge-fill-current').style.transform = `rotate(${currentAngle}deg)`;
+            
+            // --- Update Line Charts ---
+            const chartLabel = packet.MISSION_TIME;
+            
+            addDataToChart(altitudeChart, chartLabel, [packet.ALTITUDE, packet.GPS_ALTITUDE]);
+            addDataToChart(tempChart, chartLabel, [packet.TEMPERATURE]);
+            addDataToChart(pressureChart, chartLabel, [packet.PRESSURE]);
+            addDataToChart(gyroChart, chartLabel, [packet.GYRO_R, packet.GYRO_P, packet.GYRO_Y]);
+            addDataToChart(accelChart, chartLabel, [packet.ACCEL_R, packet.ACCEL_P, packet.ACCEL_Y]);
+            addDataToChart(gpsAltitudeOnlyChart, chartLabel, [packet.GPS_ALTITUDE]);
+        }
+
+    </script>
+
 </body>
 </html>

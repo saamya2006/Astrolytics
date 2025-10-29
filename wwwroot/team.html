@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Astrolytics | The Team</title> 
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* --- Color Variables (from your dashboard/theme) --- */
+        :root {
+            /* Using a dark, space-themed background color */
+            --bg-color: #0d0f1a; 
+            
+            /* Semi-transparent card background to show the background image */
+            --card-bg: rgba(26, 26, 46, 0.7); 
+            
+            --card-border: #3a3a5a;
+            --text-primary: #f0f0f5;
+            --text-secondary: #b0b0d0;
+            --accent-primary: #00aaff;  /* Electric Blue */
+            --accent-secondary: #00f0ff; /* Cyan */
+        }
+        
+        /* This assumes your 'style.css' defines the dark body background
+           and the fullscreen slideshow. If not, you might need:
+           body { background-color: var(--bg-color); } 
+        */
+
+        .logo-image {
+            height: 60px; 
+            width: auto;
+            vertical-align: middle;
+        } 
+        .content-wrapper {
+             margin-top: 100px;
+             /* Ensure content stacks on top of the slideshow */
+             position: relative;
+             z-index: 2;
+        }
+
+        /* --- Team Grid Styling --- */
+        .team-grid {
+            display: grid;
+            
+            /* Creates a responsive grid that fits as many cards as possible
+               with a minimum width of 280px */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            
+            gap: 2rem;
+            padding: 1rem 0; /* Add some padding above/below the grid */
+        }
+
+        /* --- Team Card Styling --- */
+        .team-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            
+            /* Add backdrop-filter for a "frosted glass" look */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            
+            /* Transition for the hover effect */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .team-card h3 {
+            color: var(--accent-secondary); /* Cyan color */
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-card .discipline {
+            color: var(--text-primary);
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 400;
+            margin: 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .team-card .uid {
+            color: var(--text-secondary); /* Lighter gray */
+            font-family: 'Exo 2', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+        }
+        
+        /* --- SPECIAL HOVER EFFECT --- */
+        .team-card:hover {
+            /* Make the card "float" up and get slightly bigger */
+            transform: translateY(-10px) scale(1.03);
+            
+            /* Add the "electric blue" glow */
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px var(--accent-primary), 
+                        0 0 30px rgba(0, 170, 255, 0.5);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="slideshow-js"></div> 
+
+    <header class="main-header">
+        <div class="logo">
+            <img src="logo.png" alt="Team Astrolytics Logo" class="logo-image">
+        </div>
+        <nav class="main-nav">
+            <a href="index.html">Home</a> 
+            <a href="mission.html">Mission</a> 
+            <a href="design.html">Design</a>
+            <a href="document.html">Documentation</a> 
+            <a href="data.html">Launch Data</a>
+            <a href="team.html">The Team</a>
+        </nav>
+    </header>
+
+    
+    <main class="content-wrapper">
+        
+        <section id="team-list" class="content-section">
+            <h2><span class="highlight"></span>Meet the Team</h2>
+            <p>The minds and hands behind the mission. Our team brings together expertise from aerospace, computer science, and electronics to make this project fly.</p>
+            
+            <div class="team-grid">
+                
+                <div class="team-card">
+                    <h3>Aaryan Gupta</h3>
+                    <p class="discipline">B.E (Aerospace)</p>
+                    <p class="uid">21BAS1321</p>
+                </div>
+
+                <div class="team-card">
+                    <h3>Sneha Sharma</h3>
+                    <p class="discipline">B.E (Aerospace)</p>
+                    <p class="uid">24BAS10109</p>
+                </div>
+
+                <div class="team-card">
+                    <h3>Bhabarnab Kashyap</h3>
+                    <p class="discipline">B.E (Aerospace)</p>
+                    <p class="uid">25BAS80001</p>
+                </div>
+
+                <div class="team-card">
+                    <h3>Srijohn Das</h3>
+                    <p class="discipline">B.E (Aerospace)</p>
+                    <p class="uid">24BAS10128</p>
+                </div>
+                
+                <div class="team-card">
+                    <h3>Saamyaraj Baidya</h3>
+                    <p class="discipline">B.E (CSE)</p>
+                    <p class="uid">25BCS80010</p>
+                </div>
+
+                <div class="team-card">
+                    <h3>Krishan Malik</h3>
+                    <p class="discipline">B.E (Mechanical)</p>
+                    <p class="uid">24BME10021</p>
+                </div>
+
+                <div class="team-card">
+                    <h3>Ankit Kumar</h3>
+                    <p class="discipline">B.E (Mechanical)</p>
+                    <p class="uid">24BME10002</p>
+                </div>
+                
+                <div class="team-card">
+                    <h3>Pavitra Srivastava</h3>
+                    <p class="discipline">B.E (ECE)</p>
+                    <p class="uid">23BEC10013</p>
+                </div>
+
+                <div class="team-card">
+                    <h3>Snighdha Sarali</h3>
+                    <p class="discipline">B.E (ECE)</p>
+                    <p class="uid">25BEC90001</p>
+                </div>
+
+                <div class="team-card">
+                    <h3>Sneha Mishra</h3>
+                    <p class="discipline">B.E (ECE)</p>
+                    <p class="uid">23BEC10132</p>
+                </div>
+
+            </div>
+        </section>
+        
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2025 Team Astrolytics | Mission Control</p>
+    </footer>
+
+</body>
+</html>

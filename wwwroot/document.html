@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Astrolytics | Documentation</title> 
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #0d0f1a;
+            --card-border: #3a3a5a;
+            --accent-primary: #00aaff;
+            --text-primary: #f0f0f5;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: var(--bg-color);
+            font-family: 'Exo 2', sans-serif;
+            color: var(--text-primary);
+            overflow: hidden; /* prevent scroll */
+        }
+
+        /* ---- HEADER ---- */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(13, 15, 26, 0.95);
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo-image {
+            height: 50px;
+            width: auto;
+        }
+
+        .main-nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 400;
+            transition: all 0.2s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .main-nav a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px var(--accent-primary);
+        }
+
+        /* ---- FULLSCREEN PDF VIEW AREA ---- */
+        .pdf-area {
+            position: fixed;
+            top: 70px;          /* below header */
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* equal halves */
+            width: 100vw;
+            height: calc(100vh - 70px);
+        }
+
+        .pdf-side {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .pdf-side h3 {
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-primary);
+            margin: 8px 0;
+            font-size: 20px;
+            letter-spacing: 1px;
+            background-color: rgba(13, 15, 26, 0.9);
+            padding: 6px 0;
+        }
+
+        .pdf-viewer {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+        }
+
+        .left-side {
+            border-right: 2px solid var(--card-border);
+        }
+
+        /* ---- FOOTER ---- */
+        .main-footer {
+            display: none; /* hide footer for fullscreen effect */
+        }
+
+        /* ---- RESPONSIVE (mobile view) ---- */
+        @media (max-width: 900px) {
+            .pdf-area {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+            }
+            .left-side {
+                border-right: none;
+                border-bottom: 2px solid var(--card-border);
+            }
+            .pdf-viewer {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="logo">
+            <img src="logo.png" alt="Team Astrolytics Logo" class="logo-image">
+        </div>
+        <nav class="main-nav">
+            <a href="index.html">Home</a> 
+            <a href="mission.html">Mission</a> 
+            <a href="design.html">Design</a>
+            <a href="document.html">Documentation</a> 
+            <a href="data.html">Launch Data</a>
+            <a href="team.html">The Team</a>
+        </nav>
+    </header>
+
+    <!-- FULLSCREEN PDFs -->
+    <main>
+        <div class="pdf-area">
+            <div class="pdf-side left-side">
+                <h3>Project ADAE Report</h3>
+                <iframe class="pdf-viewer" src="can-sat1.pdf" allowfullscreen></iframe>
+            </div>
+
+            <div class="pdf-side right-side">
+                <h3>Supporting Document</h3>
+                <iframe class="pdf-viewer" src="can-sat.pdf" allowfullscreen></iframe>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER (hidden for now) -->
+    <footer class="main-footer">
+        <p>&copy; 2025 Team Astrolytics | Mission Control</p>
+    </footer>
+
+</body>
+</html>

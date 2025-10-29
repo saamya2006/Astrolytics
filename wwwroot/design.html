@@ -6,7 +6,7 @@
     <title>Team Astrolytics | Design</title> 
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
@@ -17,10 +17,74 @@
             width: auto;
             vertical-align: middle;
         } 
-        /* This adds space so content isn't hidden behind the fixed header */
         .content-wrapper {
              margin-top: 100px;
         }
+
+        /* --- STYLES FOR THE TOP TWO MODELS --- */
+        
+        #models {
+            width: 100vw; 
+            max-width: 100vw; 
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        .two-column-layout {
+            display: flex;
+        }
+
+        .model-column-left,
+        .model-column-right {
+            flex: 1; 
+            padding: 0 15px; 
+            box-sizing: border-box; 
+        }
+
+        .cansat-viewer {
+            width: 100%;
+            height: 650px; 
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+        
+        /* --- NEW: STYLES FOR THE BOTTOM MODEL --- */
+        #bottom-model {
+            text-align: center; /* Centers the h2 and p tags */
+            padding-top: 60px;  /* Adds space after the full-width section */
+        }
+
+
+        /* --- For small screens (mobile) --- */
+        @media (max-width: 768px) {
+            #models {
+                width: auto;
+                max-width: 100%;
+                position: static;
+                transform: none;
+                padding: 0 15px; 
+            }
+            
+            .two-column-layout {
+                flex-direction: column; 
+                gap: 30px; 
+            }
+            
+            .model-column-left,
+            .model-column-right {
+                 padding: 0; 
+            }
+            
+            /* This rule applies to ALL three viewers on mobile */
+            .cansat-viewer {
+                 height: 500px; 
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -34,26 +98,62 @@
             <a href="design.html">Design</a>
             <a href="data.html">Launch Data</a>
             <a href="team.html">The Team</a>
+            <a href="document.html">Documentation</a> 
+            
         </nav>
     </header>
 
     
     <main class="content-wrapper">
         
-        <section id="model" class="content-section">
-            <h2><span class="highlight">01</span>Container And Shoulder Design</h2>
-            <p>Get a hands-on look at our CanSat. Click, zoom, and drag the model below to explore every component in 3D detail.</p>
+        <section id="models" class="content-section two-column-layout">
             
-            <div id="my-cansat-viewer">
+            <div class="model-column-left">
+                <h2><span class="highlight">01</span>Full Assembly</h2>
+                <p>Explore the main container assembly in 3D.</p>
+                
+                <div class="cansat-viewer">
+                    <iframe 
+                        src="https://gmail5700109.autodesk360.com/shares/public/SH28cd1QT2badd0ea72b9ab68642c7a03144?mode=embed"
+                        width="100%" 
+                        height="100%" 
+                        allowfullscreen="true" 
+                        frameborder="0">
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="model-column-right">
+                <h2><span class="highlight">02</span>Payload Design</h2>
+                <p>Explore the shoulder and separation mechanism.</p>
+                
+                <div class="cansat-viewer">
+                    <iframe 
+                        src="https://gmail5700109.autodesk360.com/shares/public/SH28cd1QT2badd0ea72bbbbf891fc0d4d4f4?mode=embed"   
+                        width="100%" 
+                        height="100%" 
+                        allowfullscreen="true" 
+                        frameborder="0">
+                    </iframe>
+                </div>
+            </div>
+            
+        </section>
+        <section id="bottom-model" class="content-section">
+            <h2><span class="highlight">03</span> Design</h2>
+            <p>View the complete CanSat assembly from all angles.</p>
+
+            <div class="cansat-viewer">
                 <iframe 
-                    src="https://gmail5700109.autodesk360.com/shares/public/SH28cd1QT2badd0ea72bf4474c4acca443b4?mode=embed"  
+                    src=""
                     width="100%" 
                     height="100%" 
                     allowfullscreen="true" 
                     frameborder="0">
                 </iframe>
             </div>
-         </section>
+        </section>
+        
          
     </main>
 
