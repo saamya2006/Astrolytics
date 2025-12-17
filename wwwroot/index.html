@@ -40,8 +40,6 @@
         }
 
         /* 2. Nav Links Hover */
-        
-        /* === THIS RULE IS NOW IDENTICAL TO document.html === */
         .main-nav a {
             color: var(--text-primary);
             text-decoration: none;
@@ -72,7 +70,6 @@
                 0 0 15px #00ffff;
         }
         
-        /* --- THIS IS THE UPDATED/REDUCED EFFECT --- */
         .hero-title:hover {
             /* Reduced "lightning" effect */
             color: #fff; /* Bright white "hot" core */
@@ -126,6 +123,11 @@
              /* Assuming it has a base color/border in style.css */
             transition: all 0.3s ease-in-out;
             border: 2px dashed #555; /* Example base border */
+            /* Center the image */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
         .spline-container:hover {
             transform: scale(1.02);
@@ -158,13 +160,13 @@
             <img src="logo.png" alt="Team Astrolytics Logo" class="logo-image">
         </div>
         <nav class="main-nav">
-            <a href="index.html">Home</a> 
-            <a href="mission.html">Mission</a> 
-            <a href="design.html">Design</a>
-            <a href="document.html">Documentation</a>
-            <a href="data.html">Launch Data</a>
-            <a href="team.html">The Team</a>
-        </nav>
+    <a href="index.html">Home</a> 
+    <a href="mission.html">Mission</a> 
+    <a href="design.html">Design</a>
+    <a href="budget.html">Budget</a> <a href="document.html">Documentation</a>
+    <a href="data.html">Launch Data</a>
+    <a href="team.html">The Team</a>
+</nav>
     </header>
 
     <section class="hero-section">
@@ -178,10 +180,10 @@
     <main class="content-wrapper">
         
         <section id="model" class="content-section">
-            <h2><span class="highlight">02</span>INTERACTIVE MODEL</h2>
-            <p>Get a hands-on look at our design. Click and drag the model below to explore every component in detail. This is where your Spline or Three.js viewer will go.</p>
+            <h2><span class="highlight">02</span>CONCEPT CANSAT</h2>
+            <p>Get a hands-on look at our design. Below is the assembled prototype featuring the custom sensor array and nose cone.</p>
             <div class="spline-container">
-                <p class="placeholder-text">Your 3D Model Viewer Goes Here</p>
+                <img src="full-design.png" alt="Astrolytics CanSat Design with transparent casing" style="width: 100%; height: auto; display: block;">
             </div>
              </section>
     </main>

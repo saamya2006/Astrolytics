@@ -152,6 +152,12 @@
             border: 1px solid var(--card-border); /* Use variable for border */
             box-shadow: 0 0 10px rgba(0, 170, 255, 0.2); /* Subtle initial glow */
             transition: all 0.3s ease-in-out; /* Added transition for hover */
+            
+            /* Center image content if needed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #000; /* Dark background for images */
         }
         /* Added Cansat Viewer Hover */
         .cansat-viewer:hover {
@@ -295,18 +301,13 @@
             </div>
             
         </section>
+
         <section id="bottom-model" class="content-section">
             <h2><span class="highlight">03</span>Full Design</h2>
             <p>View the complete CanSat assembly from all angles.</p>
 
             <div class="cansat-viewer">
-                <iframe 
-                    src=""
-                    width="100%" 
-                    height="100%" 
-                    allowfullscreen="true" 
-                    frameborder="0">
-                </iframe>
+                <img src="full-design.png" alt="Full CanSat Design Assembly" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
         </section>
         
